@@ -9,5 +9,5 @@ void loop() {
   // put your main code here, to run repeatedly:
   int estadoBotao = digitalRead(7);  
   digitalWrite(9, estadoBotao); 
-  digitalWrite(10, !estadoBotao);  
+  digitalWrite(10, estadoBotao);  
 }
