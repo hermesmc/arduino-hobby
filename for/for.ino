@@ -25,4 +25,13 @@ void loop() {
       digitalWrite(pinLed[3], LOW);    
     }
   }
+  
+  for(y=0; y < 4 ; y = y + 1){
+    delay(100); 
+    digitalWrite(pinLed[3 - y], HIGH);    
+    if (y > 0){
+      digitalWrite(pinLed[(3 - y) + 1], LOW);    
+    }
+  }
+  
 }
