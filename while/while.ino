@@ -1,6 +1,8 @@
 
 //Declarando array:
 int pinLed[9] = {13,12,11,10,9,8,7,6,5};
+int qtdLeds = 9;
+int qtdArray = qtdLeds - 1;
 int numeroLed;
 int on = 0 ;
 char digitado;
@@ -22,7 +24,7 @@ void loop() {
   while (digitado != 'P' ){
      digitalWrite(pinLed[numeroLed], LOW);    
      numeroLed++;
-     if (numeroLed > 8){
+     if (numeroLed > qtdArray){
         numeroLed = 0;
      }
      digitalWrite(pinLed[numeroLed], HIGH);    
@@ -31,5 +33,5 @@ void loop() {
      }
      delay(50);     
   }
-  delay(5000);
+  delay(3000);
 }
