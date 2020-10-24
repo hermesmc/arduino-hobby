@@ -123,3 +123,7 @@ Neste exemplo a porta 9 será utilizada para enviar energia
       }
       delay(1);
     }    
+
+## Portas analógicas
+
+Ao contrário da porta digital, que tem os valores de 0 ou 5 volts, a porta analógica permite a variação de ensão entre 0 e 5 volts.
