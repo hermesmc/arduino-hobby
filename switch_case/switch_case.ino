@@ -50,8 +50,8 @@ void loop() {
       digitalWrite(pinPD,LOW);
       break;
     case 1: 
-      digitalWrite(pinA,HIGH);
-      digitalWrite(pinB,LOW);
+      digitalWrite(pinA,LOW);
+      digitalWrite(pinB,HIGH);
       digitalWrite(pinC,HIGH);
       digitalWrite(pinD,LOW);
       digitalWrite(pinE,LOW);
@@ -80,8 +80,8 @@ void loop() {
       digitalWrite(pinPD,LOW);
       break;
     case 4: 
-      digitalWrite(pinA,HIGH);
-      digitalWrite(pinB,LOW);
+      digitalWrite(pinA,LOW);
+      digitalWrite(pinB,HIGH);
       digitalWrite(pinC,HIGH);
       digitalWrite(pinD,LOW);
       digitalWrite(pinE,LOW);
@@ -90,8 +90,8 @@ void loop() {
       digitalWrite(pinPD,LOW);
       break;
     case 5: 
-      digitalWrite(pinA,LOW);
-      digitalWrite(pinB,HIGH);
+      digitalWrite(pinA,HIGH);
+      digitalWrite(pinB,LOW);
       digitalWrite(pinC,HIGH);
       digitalWrite(pinD,HIGH);
       digitalWrite(pinE,LOW);
@@ -100,8 +100,8 @@ void loop() {
       digitalWrite(pinPD,LOW);
       break;      
     case 6: 
-      digitalWrite(pinA,LOW);
-      digitalWrite(pinB,HIGH);
+      digitalWrite(pinA,HIGH);
+      digitalWrite(pinB,LOW);
       digitalWrite(pinC,HIGH);
       digitalWrite(pinD,HIGH);
       digitalWrite(pinE,HIGH);
