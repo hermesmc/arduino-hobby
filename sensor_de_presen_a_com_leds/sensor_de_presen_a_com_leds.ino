@@ -24,5 +24,5 @@ void loop() {
       digitalWrite(pinLed[x], LOW);          
     }  
   }    
-  delay(100);  
+    
 }
