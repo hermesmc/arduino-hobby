@@ -29,8 +29,7 @@ byte          posicao;
 byte          contaObstaculo = 0;
 unsigned long controleLeitura; 
 int defLado = 0;
-int pino1 = 12;
-int pino2 = 13;
+int pinLed = 13;
 
 
 //instanciando objetos
@@ -44,8 +43,7 @@ void setup() {
   pinMode(pinSentido2MotorA, OUTPUT);
   pinMode(pinSentido1MotorB, OUTPUT);
   pinMode(pinSentido2MotorB, OUTPUT);
-  pinMode(pino1, OUTPUT);
-  pinMode(pino2, OUTPUT);
+  pinMode(pinLed, OUTPUT);
   // put your setup code here, to run once:
   #ifdef DEBUG
     Serial.begin(9600);
@@ -94,8 +92,7 @@ void loop() {
       if(parar == false){
         parar = true;
         pararMotor();
-        digitalWrite(pino1, HIGH);
-        digitalWrite(pino2, LOW);
+        digitalWrite(pinLed, HIGH);
         Serial.println("PARAR!");
         delay(500);
         if (defLado == 0) {
@@ -105,15 +102,14 @@ void loop() {
           defLado = 0;
           curvaPraTrasDir();
         }  
-        delay(500);
+        delay(1000);
         pararMotor();
       }
     } else {
       if(parar == true){
         parar = false;
         andarPraFrente();
-        digitalWrite(pino1, LOW);
-        digitalWrite(pino2, HIGH);
+        digitalWrite(pinLed, LOW);
         Serial.println("Seguir.");
       }
     }
