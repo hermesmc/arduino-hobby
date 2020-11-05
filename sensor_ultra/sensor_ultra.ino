@@ -3,11 +3,10 @@
 //Definição de pinos
 #define pingTrig 8
 #define pingEcho 9
-#define pinLed 4
 
 
 //Definição de parâmetros
-#define distObstaculo 10 // distancia em centimetros
+#define distObstaculo 27 // distancia em centimetros
 #define tempoLeitura 50 //minimo de intervalo para cada leitura
 #define medidaDist 5 //quantidade de medidas armazenadas
 
@@ -34,20 +33,13 @@ HCSR04 sensorHCSR04(pingTrig, pingEcho);
     Serial.println(F("|= Arduino com sensor de obstáculos ultrasônico =|"));
     Serial.println(F("|================================================|"));
   #endif
-
-  pinMode(pinLed, OUTPUT); 
-
   for (byte i = 0; i < medidaDist ; i++){
     mediaSensor[i] = 0;
     #ifdef DEBUG
       Serial.print("Setando posição "); Serial.print(i); Serial.println(" do Array como FALSE.");
     #endif
   }
-
-
-
-  posicao = 0;
-  
+  posicao = 0;  
   #ifdef DEBUG
     Serial.println("----- Fim do setup -----");
   #endif
@@ -82,13 +74,11 @@ void loop() {
       if(parar == false){
         parar = true;
         Serial.println("PARAR!");
-        digitalWrite(pinLed,HIGH);
       }
     } else {
       if(parar == true){
         parar = false;
         Serial.println("Seguir.");
-        digitalWrite(pinLed,LOW);
       }
     }
   

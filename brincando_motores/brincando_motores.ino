@@ -16,6 +16,7 @@ bool estadoAntBotaoA = true;
 unsigned long delayBotaoA;
 
 void setup() {
+  
   pinMode(pinBotaoA, INPUT_PULLUP);
   pinMode(pinEnableMotorA, OUTPUT);
   pinMode(pinEnableMotorB, OUTPUT);
@@ -56,12 +57,14 @@ void loop() {
      analogWrite(pinEnableMotorA, map(analogRead(pinPotenciometro), 0, 1023, 0, 255)); 
 
      if (estadoA == 1) {
+
         digitalWrite(pinSentido1MotorA, LOW);
         digitalWrite(pinSentido2MotorA, HIGH);
         digitalWrite(pinSentido1MotorB, LOW);
         digitalWrite(pinSentido2MotorB, HIGH);        
         
      } else { // estadoA == 3
+
         digitalWrite(pinSentido1MotorA, HIGH);
         digitalWrite(pinSentido2MotorA, LOW);      
         digitalWrite(pinSentido1MotorB, HIGH);
