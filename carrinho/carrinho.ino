@@ -6,7 +6,7 @@
 
 
 //Definição de parâmetros
-#define distObstaculo 27 // distancia em centimetros
+#define distObstaculo 30 // distancia em centimetros
 #define tempoLeitura 50 //minimo de intervalo para cada leitura
 #define medidaDist 5 //quantidade de medidas armazenadas
 
@@ -61,7 +61,7 @@ void setup() {
   #ifdef DEBUG
     Serial.println("----- Fim do setup -----");
   #endif
-  delay(2000);
+  delay(5000);
 }
 
 void loop() {
@@ -94,15 +94,18 @@ void loop() {
         pararMotor();
         digitalWrite(pinLed, HIGH);
         Serial.println("PARAR!");
-        delay(500);
+        delay(300);
         if (defLado == 0) {
           defLado = 1;
           curvaPraTrasEsq();
         } else {
           defLado = 0;
           curvaPraTrasDir();
-        }  
-        delay(1000);
+        } 
+        delay(700);
+        pararMotor();
+        andarPraTras();  
+        delay(700);
         pararMotor();
       }
     } else {

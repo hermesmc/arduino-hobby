@@ -1,4 +1,4 @@
-int pinos[9] = {12,11,10,9,8,7,6,5,4};
+int pinos[1] = {13};
 
 float valorLDR;
 float minimo = 85;
@@ -7,7 +7,7 @@ float luminosidade;
 
 void setup() {
   // put your setup code here, to run once:
-  for(int x = 0; x < 9; x++){
+  for(int x = 0; x < 2; x++){
      pinMode(pinos[x], OUTPUT);
   }
   pinMode(A0, INPUT);  
@@ -20,7 +20,7 @@ void loop() {
 
   luminosidade = ((valorLDR - minimo ) / (maximo - minimo)) * 10;
   luminosidade = (luminosidade - 10) * -1;
-  for (int y = 0; y < 9; y++){
+  for (int y = 0; y < 2; y++){
     if (y < luminosidade){
       digitalWrite(pinos[y], HIGH);  
     }else{
