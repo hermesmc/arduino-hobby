@@ -47,10 +47,10 @@ void loop() {
      analogWrite(pinEnableMotorA, 0);
      
   } else if (estadoA == 2) {
-     analogWrite(pinEnableMotorA, 255); 
+     analogWrite(pinEnableMotorA, 100); 
      digitalWrite(pinSentido1MotorA, HIGH);
      digitalWrite(pinSentido2MotorA, HIGH);    
-     analogWrite(pinEnableMotorB, 255); 
+     analogWrite(pinEnableMotorB, 100); 
      digitalWrite(pinSentido1MotorB, HIGH);
      digitalWrite(pinSentido2MotorB, HIGH);     
   } else {    
