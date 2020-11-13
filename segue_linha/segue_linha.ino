@@ -1,9 +1,11 @@
 #define DEBUG  
 //Parametros dos motores
-#define pinEnableMotorA 10      //Porta Digital PWM~
-#define pinEnableMotorB 11     //Porta Digital PWM~
-#define pinSentido1MotorA 3
-#define pinSentido1MotorB 6
+#define pinEnableMotorD 10      //Porta Digital PWM~
+#define pinEnableMotorE 11     //Porta Digital PWM~
+#define pinSentido1MotorD 3
+#define pinSentido2MotorD 4
+#define pinSentido1MotorE 7
+#define pinSentido2MotorE 6
 
 
 int pinLed1 = 13;
@@ -21,6 +23,8 @@ float lumInit2;
 float lumInitTtl1;
 float lumInitTtl2;
 
+// INICIALIZAÇAO --------------------------------------------------------------
+
 void setup() {
   // put your setup code here, to run once:
     #ifdef DEBUG
@@ -34,51 +38,53 @@ void setup() {
   pinMode(pinLedF, OUTPUT);
   pinMode(A1, INPUT);  
   pinMode(A2, INPUT); 
-  pinMode(pinEnableMotorA, OUTPUT);
-  pinMode(pinEnableMotorB, OUTPUT);
-  pinMode(pinSentido1MotorA, OUTPUT);
-  pinMode(pinSentido1MotorB, OUTPUT);  
+  pinMode(pinEnableMotorD, OUTPUT);
+  pinMode(pinEnableMotorE, OUTPUT);
+  pinMode(pinSentido1MotorD, OUTPUT);
+  pinMode(pinSentido1MotorE, OUTPUT);  
+  pinMode(pinSentido2MotorD, OUTPUT);
+  pinMode(pinSentido2MotorE, OUTPUT);    
 
-  digitalWrite(pinLed1, HIGH);
-  digitalWrite(pinLed2, HIGH);
-  for (int I = 0; I < 3; I++){
+  acenderLeds();
+  int repeticoes = 6;
+  for (int I = 0; I < repeticoes; I++){
     valorLDR1 = analogRead(A1);
     valorLDR2 = analogRead(A2);
-    lumInit1 = ((valorLDR1 - minimo ) / (maximo - minimo)) * 10;
-    lumInit1 = ((lumInit1 - 10) * -1);
+    lumInit1 =  calcLuminosidade(valorLDR1);
     lumInitTtl1 = lumInitTtl1 + lumInit1;
     Serial.println(lumInit1);
-    lumInit2 = ((valorLDR2 - minimo ) / (maximo - minimo)) * 10;
-    lumInit2 = ((lumInit2 - 10) * -1);
+    lumInit2 =  calcLuminosidade(valorLDR2);
     lumInitTtl2 = lumInitTtl2 + lumInit2;
     Serial.println(lumInit2);
     delay(1000);
   }
-  lumInitTtl1 = (lumInitTtl1/3);
-  lumInitTtl2 = (lumInitTtl2/3); 
+  piscaLeds(5);
+  delay(1000);
+  acenderLeds();
+  lumInitTtl1 = (lumInitTtl1/repeticoes);
+  lumInitTtl2 = (lumInitTtl2/repeticoes); 
   Serial.println(lumInitTtl1);
   Serial.println(lumInitTtl2);
   Serial.println("===========================================");
 }
+
+// PRINCIPAL --------------------------------------------------------------
 
 void loop() {
   // put your main code here, to run repeatedly:
   int ok = 0;
   valorLDR1 = analogRead(A1);
   valorLDR2 = analogRead(A2);
-  luminosidade1 = ((valorLDR1 - minimo ) / (maximo - minimo)) * 10;
-  luminosidade1 = (luminosidade1 - 10) * -1;
-    if (lumInitTtl1 < luminosidade1){
+  luminosidade1 = calcLuminosidade(valorLDR1);
+  if (lumInitTtl1 < luminosidade1){
       Serial.println(luminosidade1);
       ok = 0;
       andarPraFrenteD();
     }else{       
       Serial.println("Sem luz - 1");
-      ok = 1;
-      pararMotorD(); 
+      ok++;
     }
-  luminosidade2 = ((valorLDR2 - minimo ) / (maximo - minimo)) * 10;
-  luminosidade2 = (luminosidade2 - 10) * -1;
+  luminosidade2 = calcLuminosidade(valorLDR2);
   if (lumInitTtl2  < luminosidade2){
      Serial.println(luminosidade2);
      andarPraFrenteE();
@@ -87,57 +93,114 @@ void loop() {
       }   
   }else{
      Serial.println("Sem luz - 2");
-     pararMotorE();
-     if (ok == 0) {
-        ok = 1;
-     }   
+     ok = ok + 2;
   }
   if (ok == 0) {
      digitalWrite(pinLedF, LOW);
   } else {
+     Serial.println(ok);
+     if (ok == 1){
+        obstaculoD();
+     }
+     
+     if (ok == 2){
+        obstaculoE();
+     }
+     
+     if (ok == 3){
+        obstaculoDE();
+     }
      digitalWrite(pinLedF, HIGH);
   }       
-  delay(100); 
+  delay(500); 
 }
 
-void andarPraFrente() {
-     digitalWrite(pinSentido1MotorA, HIGH); 
-     digitalWrite(pinSentido1MotorB, HIGH);
-}
+// -------------------------------------------------------------------------
 
+float calcLuminosidade(float luminosidadeInit){
+  float lum = 0;
+  lum = ((luminosidadeInit - minimo ) / (maximo - minimo)) * 10;
+  lum = (lum - 10) * -1;
+  return lum;
+}
 void andarPraFrenteD() {
-     analogWrite(pinSentido1MotorA, 100);     
+  digitalWrite(pinEnableMotorD, HIGH);    
+  digitalWrite(pinSentido1MotorD, HIGH);   
+  digitalWrite(pinSentido2MotorD, LOW); 
 }
 
 void andarPraFrenteE() {
-      //digitalWrite(pinSentido1MotorB, HIGH);
-     analogWrite(pinSentido1MotorB, 100);   
+  digitalWrite(pinEnableMotorE, HIGH);    
+  digitalWrite(pinSentido1MotorE, HIGH);   
+  digitalWrite(pinSentido2MotorE, LOW); 
 }
 
-void andarPraTras() {
-     digitalWrite(pinEnableMotorA, HIGH);   
-     digitalWrite(pinSentido1MotorA, HIGH);
-     
-     digitalWrite(pinEnableMotorB, HIGH); 
-     digitalWrite(pinSentido1MotorB, HIGH);
-     
-}
-void pararMotor() {
-     digitalWrite(pinEnableMotorA, LOW);   
-     digitalWrite(pinSentido1MotorA, LOW);
-     
-     digitalWrite(pinEnableMotorB, LOW);    
-     digitalWrite(pinSentido1MotorB, LOW);
-     
+void andarPraTrasD() {
+  digitalWrite(pinEnableMotorD, HIGH);    
+  digitalWrite(pinSentido1MotorD, LOW);   
+  digitalWrite(pinSentido2MotorD, HIGH); 
 }
 
-void pararMotorE() {  
-     digitalWrite(pinEnableMotorB, LOW);    
-     digitalWrite(pinSentido1MotorB, LOW);
-       
+void andarPraTrasE() {
+  digitalWrite(pinEnableMotorE, HIGH);    
+  digitalWrite(pinSentido1MotorE, LOW);   
+  digitalWrite(pinSentido2MotorE, HIGH); 
 }
 
 void pararMotorD() {
-     digitalWrite(pinEnableMotorA, LOW);   
-     digitalWrite(pinSentido1MotorA, LOW);
+  digitalWrite(pinEnableMotorD, LOW);   
+  digitalWrite(pinSentido1MotorD, LOW);
+  digitalWrite(pinSentido2MotorD, LOW);
+}
+
+void pararMotorE() {  
+  digitalWrite(pinEnableMotorE, LOW);    
+  digitalWrite(pinSentido1MotorE, LOW);       
+  digitalWrite(pinSentido2MotorE, LOW);       
+}
+
+void obstaculoD() {
+  pararMotorD();
+  pararMotorE();
+  delay(500);
+  andarPraTrasD();
+  delay(1000);
+}
+
+void obstaculoE() {
+  pararMotorD();
+  pararMotorE();
+  delay(500);
+  andarPraTrasE();
+  delay(1000);
+}
+
+void obstaculoDE() {
+  pararMotorD();
+  pararMotorE();
+  delay(500);
+  andarPraTrasD();
+  andarPraTrasE();
+  delay(1000);
+}
+
+// --- LEDS
+void acenderLeds() {
+  digitalWrite(pinLed1, HIGH);
+  digitalWrite(pinLed2, HIGH);
+}
+
+void apagarLeds() {
+  digitalWrite(pinLed1, LOW);
+  digitalWrite(pinLed2, LOW);
+}
+
+void piscaLeds(int repeticoes){  
+  for ( int i = 0; i < repeticoes; i++){
+    apagarLeds();
+    delay(100);
+    acenderLeds();
+    delay(100);
+  }
+  apagarLeds();
 }
