@@ -1,12 +1,11 @@
 #define DEBUG  
 //Parametros dos motores
-#define pinEnableMotorD 10      //Porta Digital PWM~
-#define pinEnableMotorE 11     //Porta Digital PWM~
-#define pinSentido1MotorD 3
+#define pinEnableMotorD 3      //Porta Digital PWM~
+#define pinEnableMotorE 5     //Porta Digital PWM~
+#define pinSentido1MotorD 2
 #define pinSentido2MotorD 4
 #define pinSentido1MotorE 7
 #define pinSentido2MotorE 6
-
 
 int pinLed1 = 13;
 int pinLed2 = 12;
@@ -81,7 +80,7 @@ void loop() {
       ok = 0;
       andarPraFrenteD();
     }else{       
-      Serial.println("Sem luz - 1");
+      Serial.println("sem luz - 1");
       ok++;
     }
   luminosidade2 = calcLuminosidade(valorLDR2);
@@ -92,7 +91,7 @@ void loop() {
         ok = 0;
       }   
   }else{
-     Serial.println("Sem luz - 2");
+     Serial.println("sem luz - 2");
      ok = ok + 2;
   }
   if (ok == 0) {
@@ -124,37 +123,38 @@ float calcLuminosidade(float luminosidadeInit){
   return lum;
 }
 void andarPraFrenteD() {
-  digitalWrite(pinEnableMotorD, HIGH);    
+  analogWrite(pinEnableMotorD, 120);    
   digitalWrite(pinSentido1MotorD, HIGH);   
-  digitalWrite(pinSentido2MotorD, LOW); 
+  digitalWrite(pinSentido2MotorD, LOW);  
+  
 }
 
 void andarPraFrenteE() {
-  digitalWrite(pinEnableMotorE, HIGH);    
+  analogWrite(pinEnableMotorE, 120);    
   digitalWrite(pinSentido1MotorE, HIGH);   
   digitalWrite(pinSentido2MotorE, LOW); 
 }
 
 void andarPraTrasD() {
-  digitalWrite(pinEnableMotorD, HIGH);    
+  analogWrite(pinEnableMotorD, 120);    
   digitalWrite(pinSentido1MotorD, LOW);   
   digitalWrite(pinSentido2MotorD, HIGH); 
 }
 
 void andarPraTrasE() {
-  digitalWrite(pinEnableMotorE, HIGH);    
+  analogWrite(pinEnableMotorE, 120);    
   digitalWrite(pinSentido1MotorE, LOW);   
   digitalWrite(pinSentido2MotorE, HIGH); 
 }
 
 void pararMotorD() {
-  digitalWrite(pinEnableMotorD, LOW);   
+  analogWrite(pinEnableMotorD, 120);   
   digitalWrite(pinSentido1MotorD, LOW);
   digitalWrite(pinSentido2MotorD, LOW);
 }
 
 void pararMotorE() {  
-  digitalWrite(pinEnableMotorE, LOW);    
+  analogWrite(pinEnableMotorE, 120);    
   digitalWrite(pinSentido1MotorE, LOW);       
   digitalWrite(pinSentido2MotorE, LOW);       
 }
@@ -164,7 +164,8 @@ void obstaculoD() {
   pararMotorE();
   delay(500);
   andarPraTrasD();
-  delay(1000);
+  delay(100);
+  pararMotorD();
 }
 
 void obstaculoE() {
@@ -172,7 +173,8 @@ void obstaculoE() {
   pararMotorE();
   delay(500);
   andarPraTrasE();
-  delay(1000);
+  delay(100);
+  pararMotorE();
 }
 
 void obstaculoDE() {
@@ -181,7 +183,7 @@ void obstaculoDE() {
   delay(500);
   andarPraTrasD();
   andarPraTrasE();
-  delay(1000);
+  delay(500);
 }
 
 // --- LEDS
