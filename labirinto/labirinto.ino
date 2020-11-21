@@ -1,3 +1,4 @@
+#define DEBUG  
 int pinoLED  = 8;
 int pinoLED1 = 7;
 int pinoLED2 = 6;
@@ -14,6 +15,10 @@ int estadoBuzzer = LOW;
 
 void setup() {
   // Pinos configurados como entrada:
+      #ifdef DEBUG
+    Serial.begin(9600);
+    Serial.println(F("|================================================|"));
+  #endif
   pinMode(pinoLabirinto, INPUT_PULLUP); // Configurando a entrada como INPUT_PULLUP, utilizamos o resistor interno pull-up do Arduino
 
   nivel = 0;
@@ -23,18 +28,21 @@ void setup() {
   pinMode(pinoLED3, OUTPUT);
   pinMode(pinoBuzzer, OUTPUT);
   digitalWrite(pinoLED, HIGH);
-  Serial.begin(9600);
 }
 
 void loop() {
   estadoBotao = digitalRead(pinoLabirinto);
   if (estadoBotao == LOW) {
-    delay(50);
+    delay(100);
     estadoBotao = digitalRead(pinoLabirinto);
     while (!digitalRead(pinoLabirinto)) {
       delay(1);
     }
     if (estadoBotao == LOW) {
+      Serial.println("nada");
+      //nivel = nivel + 1;
+    } else{
+      Serial.println("TOCOU");      
       nivel = nivel + 1;
     }
   }
@@ -54,15 +62,13 @@ void loop() {
     digitalWrite(pinoLED3, HIGH);
     estadoBuzzer = HIGH;
   }
-  Serial.println(nivel);
+
   if (((millis() - tempoAnterior) > deltaT) && (nivel >= 1)) {
     if (estadoBuzzer) {
-      Serial.println("Toca");
       tone(pinoBuzzer, tomBuzzer);
     }
     else {
       noTone(pinoBuzzer);
-      Serial.println("Não toca");
     }
     estadoBuzzer = !estadoBuzzer;
     tempoAnterior = millis();
