@@ -1,16 +1,21 @@
-int pinoLed = 8; //PINO DIGITAL UTILIZADO PELO LED  
+#define DEBUG  
 int pinoSensor = 7; //PINO DIGITAL UTILIZADO PELO SENSOR
    
-void setup(){  
+void setup(){ 
+  #ifdef DEBUG
+    Serial.begin(9600);
+    Serial.println(F("|================================================|"));
+    Serial.println(F("|= Arduino com sensor de linhas                 =|"));
+    Serial.println(F("|================================================|"));
+  #endif 
   pinMode(pinoSensor, INPUT); //DEFINE O PINO COMO ENTRADA
-  pinMode(pinoLed, OUTPUT); //DEFINE O PINO COMO SAÍDA   
-  digitalWrite(pinoLed, LOW); //LED INICIA DESLIGADO
 }  
    
 void loop(){
   if (digitalRead(pinoSensor) == LOW){ //SE A LEITURA DO PINO FOR IGUAL A LOW, FAZ
-        digitalWrite(pinoLed, HIGH); //ACENDE O LED
+        Serial.println("COM LUZ");
   }else{//SENÃO, FAZ
-        digitalWrite(pinoLed, LOW); //APAGA O LED
-  }    
+        Serial.println("sem luz");
+  } 
+  delay(2000);   
 }

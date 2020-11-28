@@ -1,15 +1,20 @@
 #define DEBUG  
 //Parametros dos motores
 #define pinEnableMotorD 3      //Porta Digital PWM~
-#define pinEnableMotorE 5     //Porta Digital PWM~
+#define pinEnableMotorE 9     //Porta Digital PWM~
 #define pinSentido1MotorD 2
 #define pinSentido2MotorD 4
-#define pinSentido1MotorE 7
-#define pinSentido2MotorE 6
+#define pinSentido1MotorE 8
+#define pinSentido2MotorE 10
+
+#define veloc0 0
+#define veloc1 80
+#define veloc2 180
+#define veloc3 255
 
 int pinLed1 = 13;
 int pinLed2 = 12;
-int pinLedF = 8;
+int pinLedF = 7;
 
 float valorLDR1;
 float valorLDR2;
@@ -32,11 +37,12 @@ void setup() {
     Serial.println(F("|= Arduino com sensor de obstáculos ultrasônico =|"));
     Serial.println(F("|================================================|"));
   #endif
+  pinMode(A1, INPUT);  
+  pinMode(A2, INPUT); 
+  
   pinMode(pinLed1, OUTPUT);
   pinMode(pinLed2, OUTPUT);
   pinMode(pinLedF, OUTPUT);
-  pinMode(A1, INPUT);  
-  pinMode(A2, INPUT); 
   pinMode(pinEnableMotorD, OUTPUT);
   pinMode(pinEnableMotorE, OUTPUT);
   pinMode(pinSentido1MotorD, OUTPUT);
@@ -44,6 +50,7 @@ void setup() {
   pinMode(pinSentido2MotorD, OUTPUT);
   pinMode(pinSentido2MotorE, OUTPUT);    
 
+  // Verifica luminosidade para iniciar o robô
   acenderLeds();
   int repeticoes = 6;
   for (int I = 0; I < repeticoes; I++){
@@ -76,7 +83,7 @@ void loop() {
   valorLDR2 = analogRead(A2);
   luminosidade1 = calcLuminosidade(valorLDR1);
   if (lumInitTtl1 < luminosidade1){
-      Serial.println(luminosidade1);
+      Serial.println("ANDA D");
       ok = 0;
       andarPraFrenteD();
     }else{       
@@ -85,7 +92,7 @@ void loop() {
     }
   luminosidade2 = calcLuminosidade(valorLDR2);
   if (lumInitTtl2  < luminosidade2){
-     Serial.println(luminosidade2);
+     Serial.println("ANDA E");
      andarPraFrenteE();
      if (ok == 0) {
         ok = 0;
@@ -111,7 +118,7 @@ void loop() {
      }
      digitalWrite(pinLedF, HIGH);
   }       
-  delay(500); 
+  delay(10); 
 }
 
 // -------------------------------------------------------------------------
@@ -123,38 +130,44 @@ float calcLuminosidade(float luminosidadeInit){
   return lum;
 }
 void andarPraFrenteD() {
-  analogWrite(pinEnableMotorD, 120);    
+  Serial.println("andando D");
+  analogWrite(pinEnableMotorD, veloc2);    
   digitalWrite(pinSentido1MotorD, HIGH);   
   digitalWrite(pinSentido2MotorD, LOW);  
   
 }
 
 void andarPraFrenteE() {
-  analogWrite(pinEnableMotorE, 120);    
+  Serial.println("andando E");
+  analogWrite(pinEnableMotorE, veloc2);    
   digitalWrite(pinSentido1MotorE, HIGH);   
   digitalWrite(pinSentido2MotorE, LOW); 
 }
 
 void andarPraTrasD() {
-  analogWrite(pinEnableMotorD, 120);    
+  Serial.println("pra tras D");
+  analogWrite(pinEnableMotorD, veloc1);    
   digitalWrite(pinSentido1MotorD, LOW);   
   digitalWrite(pinSentido2MotorD, HIGH); 
 }
 
 void andarPraTrasE() {
-  analogWrite(pinEnableMotorE, 120);    
+  Serial.println("pra tras E");
+  analogWrite(pinEnableMotorE, veloc1);    
   digitalWrite(pinSentido1MotorE, LOW);   
   digitalWrite(pinSentido2MotorE, HIGH); 
 }
 
 void pararMotorD() {
-  analogWrite(pinEnableMotorD, 120);   
+  Serial.println("parar D");
+  analogWrite(pinEnableMotorD, veloc0);   
   digitalWrite(pinSentido1MotorD, LOW);
   digitalWrite(pinSentido2MotorD, LOW);
 }
 
 void pararMotorE() {  
-  analogWrite(pinEnableMotorE, 120);    
+  Serial.println("parar E");
+  analogWrite(pinEnableMotorE, veloc0);    
   digitalWrite(pinSentido1MotorE, LOW);       
   digitalWrite(pinSentido2MotorE, LOW);       
 }
@@ -172,19 +185,16 @@ void obstaculoE() {
   pararMotorD();
   pararMotorE();
   delay(500);
-  andarPraTrasE();
+  andarPraFrenteD();
   delay(100);
-  pararMotorE();
 }
 
 void obstaculoDE() {
   pararMotorD();
   pararMotorE();
   delay(500);
-  andarPraTrasD();
-  andarPraTrasE();
-  delay(500);
-}
+  andarPraFrenteE();
+  delay(100);}
 
 // --- LEDS
 void acenderLeds() {
