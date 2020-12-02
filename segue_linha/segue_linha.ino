@@ -14,7 +14,8 @@
 
 int pinLed1 = 13;
 int pinLed2 = 12;
-int pinLedF = 7;
+int pinLedD = 6;
+int pinLedE = 7;
 
 float valorLDR1;
 float valorLDR2;
@@ -42,7 +43,8 @@ void setup() {
   
   pinMode(pinLed1, OUTPUT);
   pinMode(pinLed2, OUTPUT);
-  pinMode(pinLedF, OUTPUT);
+  pinMode(pinLedD, OUTPUT);
+  pinMode(pinLedE, OUTPUT);
   pinMode(pinEnableMotorD, OUTPUT);
   pinMode(pinEnableMotorE, OUTPUT);
   pinMode(pinSentido1MotorD, OUTPUT);
@@ -85,7 +87,7 @@ void loop() {
   if (lumInitTtl1 < luminosidade1){
       Serial.println("ANDA D");
       ok = 0;
-      andarPraFrenteD();
+      andarPraFrenteD(veloc1);
     }else{       
       Serial.println("sem luz - 1");
       ok++;
@@ -93,7 +95,7 @@ void loop() {
   luminosidade2 = calcLuminosidade(valorLDR2);
   if (lumInitTtl2  < luminosidade2){
      Serial.println("ANDA E");
-     andarPraFrenteE();
+     andarPraFrenteE(veloc1);
      if (ok == 0) {
         ok = 0;
       }   
@@ -102,7 +104,6 @@ void loop() {
      ok = ok + 2;
   }
   if (ok == 0) {
-     digitalWrite(pinLedF, LOW);
   } else {
      Serial.println(ok);
      if (ok == 1){
@@ -116,7 +117,8 @@ void loop() {
      if (ok == 3){
         obstaculoDE();
      }
-     digitalWrite(pinLedF, HIGH);
+     digitalWrite(pinLedD, LOW);
+     digitalWrite(pinLedE, LOW);
   }       
   delay(10); 
 }
@@ -129,33 +131,33 @@ float calcLuminosidade(float luminosidadeInit){
   lum = (lum - 10) * -1;
   return lum;
 }
-void andarPraFrenteD() {
+void andarPraFrenteD(int velocidade) {
   Serial.println("andando D");
-  analogWrite(pinEnableMotorD, veloc2);    
-  digitalWrite(pinSentido1MotorD, HIGH);   
-  digitalWrite(pinSentido2MotorD, LOW);  
+  analogWrite(pinEnableMotorD, velocidade);    
+  digitalWrite(pinSentido2MotorD, HIGH);   
+  digitalWrite(pinSentido1MotorD, LOW);  
   
 }
 
-void andarPraFrenteE() {
+void andarPraFrenteE(int velocidade) {
   Serial.println("andando E");
-  analogWrite(pinEnableMotorE, veloc2);    
-  digitalWrite(pinSentido1MotorE, HIGH);   
-  digitalWrite(pinSentido2MotorE, LOW); 
+  analogWrite(pinEnableMotorE, velocidade);    
+  digitalWrite(pinSentido2MotorE, HIGH);   
+  digitalWrite(pinSentido1MotorE, LOW); 
 }
 
-void andarPraTrasD() {
+void andarPraTrasD(int velocidade) {
   Serial.println("pra tras D");
-  analogWrite(pinEnableMotorD, veloc1);    
-  digitalWrite(pinSentido1MotorD, LOW);   
-  digitalWrite(pinSentido2MotorD, HIGH); 
+  analogWrite(pinEnableMotorD, velocidade);    
+  digitalWrite(pinSentido2MotorD, LOW);   
+  digitalWrite(pinSentido1MotorD, HIGH); 
 }
 
-void andarPraTrasE() {
+void andarPraTrasE(int velocidade) {
   Serial.println("pra tras E");
-  analogWrite(pinEnableMotorE, veloc1);    
-  digitalWrite(pinSentido1MotorE, LOW);   
-  digitalWrite(pinSentido2MotorE, HIGH); 
+  analogWrite(pinEnableMotorE, velocidade);    
+  digitalWrite(pinSentido2MotorE, LOW);   
+  digitalWrite(pinSentido1MotorE, HIGH); 
 }
 
 void pararMotorD() {
@@ -173,27 +175,30 @@ void pararMotorE() {
 }
 
 void obstaculoD() {
+  digitalWrite(pinLedD, HIGH);
   pararMotorD();
   pararMotorE();
   delay(500);
-  andarPraTrasD();
+  andarPraFrenteD(veloc1);
   delay(100);
   pararMotorD();
 }
 
 void obstaculoE() {
+  digitalWrite(pinLedE, HIGH);
   pararMotorD();
   pararMotorE();
   delay(500);
-  andarPraFrenteD();
+  andarPraFrenteE(veloc1);
   delay(100);
+  pararMotorE();
 }
 
 void obstaculoDE() {
   pararMotorD();
   pararMotorE();
   delay(500);
-  andarPraFrenteE();
+  andarPraFrenteE(veloc1);
   delay(100);}
 
 // --- LEDS
