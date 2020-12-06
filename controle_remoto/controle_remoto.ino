@@ -2,8 +2,6 @@
 #define in2 5 // Entrada do motor 1
 #define in3 11 // Entrada do motor 2
 #define in4 10 // Entrada do motor 2
-#define in5 12 // Led direita
-#define in6 13 // Led esquerda
  
  
 int dataIn[5] {0,0,0,0}; // Vetor dos dados completos que receberemos do aplicativo
@@ -18,14 +16,10 @@ pinMode(in1, OUTPUT);
 pinMode(in2, OUTPUT);
 pinMode(in3, OUTPUT);
 pinMode(in4, OUTPUT);
-pinMode(in5, OUTPUT);
-pinMode(in6, OUTPUT);
 pinMode(2, OUTPUT); // Definindo o pino do led
 }
  
 void loop() {
-//  digitalWrite(in5, HIGH);
-//  digitalWrite(in6, HIGH);
   if (Serial.available() > 0) { // Verificando se há dados para receber do bluetooth.
     time1 = millis(); // A variavel time1 salva o tempo em que o bluetooth enviou dados da ultima vez
     digitalWrite(2, HIGH); // ativa o led de indicação que a conexão está ativa
