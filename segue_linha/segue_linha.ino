@@ -133,43 +133,37 @@ float calcLuminosidade(float luminosidadeInit){
 }
 void andarPraFrenteD(int velocidade) {
   Serial.println("andando D");
-  analogWrite(pinEnableMotorD, velocidade);    
-  digitalWrite(pinSentido2MotorD, HIGH);   
+  analogWrite(pinSentido2MotorD, velocidade);   
   digitalWrite(pinSentido1MotorD, LOW);  
   
 }
 
 void andarPraFrenteE(int velocidade) {
   Serial.println("andando E");
-  analogWrite(pinEnableMotorE, velocidade);    
-  digitalWrite(pinSentido2MotorE, HIGH);   
+  analogWrite(pinSentido2MotorE, velocidade);   
   digitalWrite(pinSentido1MotorE, LOW); 
 }
 
 void andarPraTrasD(int velocidade) {
   Serial.println("pra tras D");
-  analogWrite(pinEnableMotorD, velocidade);    
   digitalWrite(pinSentido2MotorD, LOW);   
-  digitalWrite(pinSentido1MotorD, HIGH); 
+  analogWrite(pinSentido1MotorD, velocidade); 
 }
 
 void andarPraTrasE(int velocidade) {
   Serial.println("pra tras E");
-  analogWrite(pinEnableMotorE, velocidade);    
   digitalWrite(pinSentido2MotorE, LOW);   
-  digitalWrite(pinSentido1MotorE, HIGH); 
+  analogWrite(pinSentido1MotorE, velocidade); 
 }
 
 void pararMotorD() {
   Serial.println("parar D");
-  analogWrite(pinEnableMotorD, veloc0);   
   digitalWrite(pinSentido1MotorD, LOW);
   digitalWrite(pinSentido2MotorD, LOW);
 }
 
 void pararMotorE() {  
   Serial.println("parar E");
-  analogWrite(pinEnableMotorE, veloc0);    
   digitalWrite(pinSentido1MotorE, LOW);       
   digitalWrite(pinSentido2MotorE, LOW);       
 }
