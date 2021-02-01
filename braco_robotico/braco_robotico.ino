@@ -17,7 +17,9 @@ Servo myservoProfundidade; //Objeto servo para profundidade a altura do braço
  
  
 int val;    // variable to read the value from the analog pin
- 
+int x;
+int y;
+int altura; 
 void setup()
 {
   //Associa cada objeto a um pino pwm
@@ -29,32 +31,43 @@ void setup()
  
 void loop()
 {
- 
-  val = map(500, 0, 1023, 0, 179);
-  myservoBase.write(val);
- 
-  val = map(1000, 0, 1023, 0, 179);
-  myservoGarra.write(val);
- 
-  val = map(200, 0, 1023, 0, 179);
-  myservoAltura.write(val);
- 
-  val = map(0, 0, 1023, 0, 179);
-  myservoProfundidade.write(val);
- 
+  inicial();
+  delay(5000);
+  subir(1000);
   delay(2000);
 
+}
+
+void inicial(){
+  altura = 250;
   val = map(500, 0, 1023, 0, 179); // Pra frente 500 - para direita 0 - 1000 esquerda
-  myservoBase.write(val);
- 
-  val = map(200, 0, 1023, 0, 179); // 1000 garra fechada - 200 garra aberta
-  myservoGarra.write(val);
- 
-  val = map(200, 0, 1023, 0, 179); // 1000 altura máxima - 200 minímo
-  myservoAltura.write(val);
- 
-  val = map(0, 0, 1023, 0, 179); // 800 prof máxima - 0 mínima
-  myservoProfundidade.write(val);
- 
-  delay(2000);
+  myservoBase.write(val); 
+  val = map(1000, 0, 1023, 0, 179); // 1000 garra fechada - 200 garra aberta
+  myservoGarra.write(val); 
+  val = map(altura, 0, 1023, 0, 179); // 1000 altura máxima - 200 minímo
+  myservoAltura.write(val); 
+  val = map(000, 0, 1023, 0, 179); // 800 prof máxima - 0 mínima
+  myservoProfundidade.write(val);  
+}
+
+void subir(int max)
+{
+  if (max > altura){ 
+    x = altura;
+    for(y=0; y < 12 ; y = y + 1){
+      x = x + 50;
+      if (x >= max) {
+        y = 12;
+      } else {      
+        val = map(x, 0, 1023, 0, 179); // 1000 altura máxima - 200 minímo
+        myservoAltura.write(val);
+        altura = x;
+        delay(30);
+      } 
+    }
+  }  
+}  
+
+void descer(int max)
+{
 }
