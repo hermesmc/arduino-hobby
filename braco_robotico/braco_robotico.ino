@@ -10,6 +10,9 @@
 #define direita  0
 #define centro   500
 #define esquerda 1000
+#define fechada 1000
+#define aberta 200
+#define DEBUG
  
 #include <Servo.h>
  
@@ -24,8 +27,15 @@ int x;
 int y;
 int altura; 
 int lado; 
+int vlr_delay = 10;
 void setup()
 {
+  #ifdef DEBUG
+    Serial.begin(9600);
+    Serial.println(F("|================================================|"));
+    Serial.println(F("|========== Arduino com braço robótico ==========|"));
+    Serial.println(F("|================================================|"));
+  #endif
   //Associa cada objeto a um pino pwm
   myservoBase.attach(3);
   myservoGarra.attach(5);
@@ -38,11 +48,28 @@ void setup()
 void loop()
 {
   delay(2000);
+  Serial.println("Centro");
   posicao_centro();
-  subir(1000);
   delay(2000);
+  Serial.println("Subir");
+  subir(1000);  
+  delay(2000);
+  Serial.println("Abre");
+  garra(200, 0);
+  delay(1000);
+  Serial.println("Fecha");
+  garra(1000, 1);
+  delay(2000);
+  
+  Serial.println("Descer");
   descer(250);
-  lado_direito(200);
+  delay(2000);
+  Serial.println("Direita");
+  lado_direito(100);
+  delay(2000);
+  Serial.println("Esquerda");
+  lado_esquerdo(900);
+  
 }
 
 void inicial(){
@@ -58,6 +85,29 @@ void inicial(){
   myservoProfundidade.write(val);  
 }
 
+void garra(int vlr_garra, int movimento){
+   // movimento = 0: abrir;
+   // movimento = 1: fechar;
+   if (movimento == 0){
+      val = map(200, 0, 1023, 0, 179);
+      myservoGarra.write(val);     
+   } else{
+      if (vlr_garra < 1001){
+         x = 0;
+         for(y=0; y < 50 ; y = y + 1){
+            x = x + 10;
+            if (x >= vlr_garra) {
+               y = 50;
+            } else {      
+              val = map(x, 0, 1023, 0, 179);
+              myservoGarra.write(val);                 
+              delay(10);
+           } 
+         }        
+      }    
+   }
+}
+
 void subir(int max)
 {
   if (max > altura){ 
@@ -70,7 +120,7 @@ void subir(int max)
         val = map(x, 0, 1023, 0, 179); // 1000 altura máxima - 200 minímo
         myservoAltura.write(val);
         altura = x;
-        delay(20);
+        delay(10);
       } 
     }
   }  
@@ -88,7 +138,7 @@ void descer(int min)
         val = map(x, 0, 1023, 0, 179); 
         myservoAltura.write(val);
         altura = x;
-        delay(20);
+        delay(10);
       } 
     }
   }  
@@ -97,33 +147,68 @@ void descer(int min)
 void lado_direito(int teste)
 { 
   if ((teste > direita) && (teste < centro)){
+    Serial.println("Vai para direita");
     x = lado;
     for(y=0; y < 50 ; y = y++){
       x = x - 10;
       if (x <= teste) {
+        Serial.println("Não vai mais direita");
         y = 50;
       } else {      
          val = map(x, 0, 1023, 0, 179); 
          myservoBase.write(val); 
          lado = x;
-         delay(20);
+         delay(vlr_delay);
+      } 
+    }
+  }  
+}
+
+void lado_esquerdo(int teste)
+{ 
+  if ((teste < esquerda) && (teste > centro)){
+    Serial.println("Vai para esquerda");
+    x = lado;
+    for(y=0; y < 50 ; y = y++){
+      x = x + 10;
+      if (x >= teste) {
+        Serial.println("Não vai mais esquerda");
+        y = 50;
+      } else {      
+         val = map(x, 0, 1023, 0, 179); 
+         myservoBase.write(val); 
+         lado = x;
+         delay(vlr_delay);
       } 
     }
   }  
 }
 
 void posicao_centro()
-{
-  x = lado;   
-  for(y=0; y < 50 ; y = y + 1){
-    x = x + 10;
-    if (x <= centro) {
-      y = 50;
-    } else {      
-       val = map(x, 0, 1023, 0, 179);
-       myservoBase.write(val); 
-       lado = x;
-       delay(20);
-    } 
+{  
+  if (lado != centro){  
+    x = lado;   
+    for(y=0; y < 50 ; y = y + 1){
+       if (lado < 500){
+         x = x + 10;
+         if (x >= centro) {
+           y = 50;
+         } else {      
+           val = map(x, 0, 1023, 0, 179);
+           myservoBase.write(val); 
+           lado = x;
+         }        
+      }else{
+        x = x - 10;
+        if (x <= centro) {
+             y = 50;
+        } else {      
+           val = map(x, 0, 1023, 0, 179);
+           myservoBase.write(val); 
+           lado = x;
+        }                                
+      } 
+      delay(vlr_delay);
+    }
   }
 }
