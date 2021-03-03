@@ -77,7 +77,22 @@ void loop()
   delay(2000);
   Serial.println("Esquerda");
   lado_esquerdo(900);
-  
+  delay(1000);  
+  Serial.println("Subir");
+  subir(700);   
+  delay(1000);   
+  Serial.println("Para frente");
+  para_frente(500);
+  delay(1000);  
+  Serial.println("Abre");
+  garra(900, 0);
+  delay(1000);
+  Serial.println("Fecha");
+  garra(1000, 1);
+  delay(2000);
+  Serial.println("Para tras");
+  para_tras(0);
+  delay(1000);  
 }
 
 void inicial(){
@@ -221,11 +236,11 @@ void posicao_centro()
   }
 }
 
-void para_frente(int vlr_frente){  
+void para_frente(int vlr_frente){
   if (vlr_frente < prof_max){  
     x = prof_atu;   
     for(y=0; y < 50 ; y = y + 1){
-       if (lado < 500){
+       if (prof_atu < 500){
          x = x + 10;
          if (x >= vlr_frente) {
            y = 50;
@@ -235,18 +250,18 @@ void para_frente(int vlr_frente){
          }        
       }      
     }
-    prof_atu = x;
+    prof_atu = vlr_frente;
     delay(vlr_delay);
   }
 } 
 
 void para_tras(int vlr_tras){  
-  if (vlr_tras > 0 ){  
+  if (vlr_tras >= 0 ){  
     x = prof_atu;   
-    for(y=0; y < 50 ; y = y + 1){
-       if (lado < 500){
+    for(y=0; y < 50 ; y++){
+       if (prof_atu > 0){
          x = x - 10;
-         if (x >= vlr_tras) {
+         if (x <= vlr_tras) {
            y = 50;
          } else {      
            val = map(x, 0, 1023, 0, 179); 
@@ -254,7 +269,7 @@ void para_tras(int vlr_tras){
          }        
       }      
     }
-    prof_atu = x;
+    prof_atu = vlr_tras;
     delay(vlr_delay);
   }
 }   
