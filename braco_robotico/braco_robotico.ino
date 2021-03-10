@@ -45,54 +45,58 @@ void setup()
   myservoAltura.attach(9);
   myservoProfundidade.attach(11);
   inicial();
-  delay(5000);
+  delay(3000);
 }
  
 void loop()
 {
-  delay(2000);
   Serial.println("Centro");
   posicao_centro();
   delay(2000);
   Serial.println("Direita");
   lado_direito(100);
-  delay(2000);  
+  delay(500);  
   Serial.println("Subir");
   subir(700);  
-  delay(2000);
-  Serial.println("Abre");
+  delay(500);
+  Serial.println("Abre Garra");
   garra(900, 0);
-  delay(1000);
+  delay(500);
+  Serial.println("Descer");
+  descer(400);
+  delay(500);
   Serial.println("Para frente");
   para_frente(500);
-  delay(1000);
-  Serial.println("Fecha");
+  delay(500);
+  Serial.println("Fecha Garra");
   garra(1000, 1);
-  delay(2000);
+  delay(500);
   Serial.println("Para tras");
   para_tras(0);
-  delay(1000);  
+  delay(500);  
   Serial.println("Descer");
   descer(250);
-  delay(2000);
+  delay(500);
   Serial.println("Esquerda");
   lado_esquerdo(900);
-  delay(1000);  
+  delay(500);  
   Serial.println("Subir");
   subir(700);   
-  delay(1000);   
+  delay(500);   
   Serial.println("Para frente");
   para_frente(500);
-  delay(1000);  
-  Serial.println("Abre");
+  delay(500);  
+  Serial.println("Abre Garra");
   garra(900, 0);
-  delay(1000);
-  Serial.println("Fecha");
+  delay(500);
+  Serial.println("Fecha Garra");
   garra(1000, 1);
-  delay(2000);
+  delay(500);
   Serial.println("Para tras");
   para_tras(0);
-  delay(1000);  
+  delay(500);
+  Serial.println("Descer");
+  descer(250);  
 }
 
 void inicial(){
